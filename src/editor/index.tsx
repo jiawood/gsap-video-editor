@@ -50,10 +50,17 @@ const Editor = () => {
     <Observer>
       {() => (
         <div className="editor" ref={editorRef}>
-          <div className="box1">box1</div>
-          <div className="box2">box2</div>
+          {
+            vm.itemList.map((item) => <div key={item.className}>
+              {
+                item.type === 'image' && <img className={item.className} src={item.domProps.src}/>
+              }
+            </div>)
+          }
           <Button onClick={vm.play}>play</Button>
           <Button onClick={vm.pause}>pause</Button>
+          <Button onClick={vm.add}>add</Button>
+          <Button onClick={vm.remove}>remove</Button>
           <DecimalStep vm={vm}></DecimalStep>
         </div>
       )}

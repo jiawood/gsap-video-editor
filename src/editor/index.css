@@ -4,3 +4,8 @@
     width: 50px;
     border-radius: 4px;
 }
+
+
+.pic1, .pic2, .pic3 {
+    max-width: 200px;
+}

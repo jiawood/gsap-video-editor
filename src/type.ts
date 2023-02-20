@@ -5,4 +5,5 @@ export interface Item {
     aniType: 'scale',
     aniDuration: number,
     aniStartTime: number,
+    tl: any,
 }
