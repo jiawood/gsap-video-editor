@@ -4,7 +4,6 @@ import pic1 from "../assets/pic1.jpg";
 import pic2 from "../assets/pic2.jpg";
 import pic3 from "../assets/pic3.jpg";
 import { Item } from "../type";
-import { ItemType } from "antd/es/menu/hooks/useItems";
 
 // 需要你有一个序列化的数组，每个的数据有很多属性，根据属性进行dom节点的渲染，和动画的生成
 
@@ -19,12 +18,17 @@ export default class VM {
   totalTime = 0;
   curTime = 0;
 
+  selectedIndex = -1;
+
   itemList: Item[] = [
     {
+      id: Math.random(),
       type: "image",
       className: "pic1",
       domProps: {
         src: pic1,
+        x: 50,
+        y: 50,
       },
       aniType: "scale",
       aniDuration: 2,
@@ -32,10 +36,13 @@ export default class VM {
       tl: null,
     },
     {
+      id: Math.random(),
       type: "image",
       className: "pic2",
       domProps: {
         src: pic2,
+        x: 70,
+        y: 80,
       },
       aniType: "scale",
       aniDuration: 2,
@@ -50,7 +57,7 @@ export default class VM {
         this.refreshProgress();
       },
     });
-    this.initAni()
+    this.initAni();
     this.mainTl.play();
   };
 
@@ -75,27 +82,26 @@ export default class VM {
   generateAni = (item: Item) => {
     // this.mainTl.clear()
 
-    const t = gsap.timeline();
-    item.tl = t;
-    t.to(this.q("." + item.className), {
-      scale: 2,
-      duration: item.aniDuration,
-    });
-    this.mainTl.add(t, item.aniStartTime);
+    if (item.aniType === "scale") {
+      this.scale(item);
+    }
   };
 
   add = () => {
-    const item:Item = {
-        type: "image",
-        className: "pic3",
-        domProps: {
-          src: pic3,
-        },
-        aniType: "scale",
-        aniDuration: 1,
-        aniStartTime: this.curTime,
-        tl: null,
-      }
+    const item: Item = {
+      id: Math.random(),
+      type: "image",
+      className: "pic3",
+      domProps: {
+        src: pic3,
+        x: 100,
+        y: 120,
+      },
+      aniType: "scale",
+      aniDuration: 1,
+      aniStartTime: this.curTime,
+      tl: null,
+    };
     this.itemList = this.itemList.concat(item);
     setTimeout(() => {
       this.generateAni(item);
@@ -132,5 +138,57 @@ export default class VM {
       return;
     }
     this.mainTl.play();
+  };
+
+  // 编辑模块
+  editorItem = (item: Item, index: number) => {
+    this.selectedIndex = index
+  }
+
+  // 删除模块
+  deleteItem = () => {
+    if(this.selectedIndex === -1){
+      return 
+    }
+    const itemList = this.itemList 
+    this.mainTl.remove(itemList[this.selectedIndex].tl)
+    itemList.splice(this.selectedIndex,1)
+    this.selectedIndex = -1 
+    this.itemList = itemList
+  }
+  // 定义一系列的动画
+  scale = (item: Item) => {
+    const t = gsap.timeline();
+    item.tl = t;
+
+    t.set(this.q("." + item.className), {
+      x: item.domProps.x,
+      y: item.domProps.y,
+    })
+      .fromTo(
+        this.q("." + item.className),
+        {
+          opacity: 0,
+        },
+        {
+          opacity: 1,
+          duration: 0.01,
+        }
+      )
+      .to(this.q("." + item.className), {
+        scale: 2,
+        duration: item.aniDuration,
+      })
+      .fromTo(
+        this.q("." + item.className),
+        {
+          opacity: 1,
+        },
+        {
+          opacity: 0,
+          duration: 0.01,
+        }
+      );
+    this.mainTl.add(t, item.aniStartTime);
   };
 }

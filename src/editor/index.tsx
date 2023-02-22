@@ -49,20 +49,36 @@ const Editor = () => {
       {() => (
         <div className="editor" ref={editorRef}>
           <div className="editorArea">
-
-          {
-            vm.itemList.map((item) => <div className='item' key={item.className}>
-              {
-                item.type === 'image' && <img className={item.className} src={item.domProps.src}/>
-              }
-            </div>)
-          }
+            {vm.itemList.map((item, index) => (
+              <div
+                className={cl(
+                  "item",
+                  vm.selectedIndex > -1 &&
+                    (vm.itemList[vm.selectedIndex].id === item.id
+                      ? "selected"
+                      : "")
+                )}
+                key={item.id}
+                onClick={() => vm.editorItem(item, index)}
+              >
+                {item.type === "image" && (
+                  <img className={item.className} src={item.domProps.src} />
+                )}
+              </div>
+            ))}
           </div>
           <Button onClick={vm.play}>play</Button>
           <Button onClick={vm.pause}>pause</Button>
           <Button onClick={vm.add}>add</Button>
           <Button onClick={vm.remove}>remove</Button>
           <DecimalStep vm={vm}></DecimalStep>
+          <div className="oprateArea">
+            {vm.selectedIndex > -1 && (
+              <div>
+                <Button onClick={vm.deleteItem}>删除</Button>
+              </div>
+            )}
+          </div>
         </div>
       )}
     </Observer>
