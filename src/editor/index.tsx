@@ -3,6 +3,7 @@ import VM from "./index.vm";
 import { Observer } from "mobx-react-lite";
 import { useState, useLayoutEffect, useRef, useMemo } from "react";
 import { Col, InputNumber, Row, Slider, Space } from "antd";
+import cl from "classnames";
 import { Button } from "antd";
 import gsap from "gsap";
 import "./index.css";
@@ -23,12 +24,9 @@ const DecimalStep: React.FC<{ vm: VM }> = ({ vm }) => {
           </Col>
           <Col span={4}>
             <InputNumber
-              min={0}
-              max={1}
               style={{ margin: "0 16px" }}
-              step={0.01}
-              value={vm.progressValue}
-              onChange={vm.setProgressValue}
+              value={vm.curTime}
+              onChange={vm.setCurTime}
             />
           </Col>
         </Row>
@@ -50,13 +48,16 @@ const Editor = () => {
     <Observer>
       {() => (
         <div className="editor" ref={editorRef}>
+          <div className="editorArea">
+
           {
-            vm.itemList.map((item) => <div key={item.className}>
+            vm.itemList.map((item) => <div className='item' key={item.className}>
               {
                 item.type === 'image' && <img className={item.className} src={item.domProps.src}/>
               }
             </div>)
           }
+          </div>
           <Button onClick={vm.play}>play</Button>
           <Button onClick={vm.pause}>pause</Button>
           <Button onClick={vm.add}>add</Button>
