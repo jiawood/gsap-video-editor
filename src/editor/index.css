@@ -27,12 +27,13 @@
     top: 0;
 }
 
-.pic1, .pic2, .pic3 {
+.aniImg {
     max-width: 200px;
+    transform-origin: 50% 50%;
     opacity: 0;
 }
 
 
-.selected {
+.selected .aniItem {
     border: 1px solid black;
 }

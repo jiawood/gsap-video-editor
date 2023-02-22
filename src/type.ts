@@ -3,7 +3,7 @@ export interface Item {
     type: 'image'| 'text',
     className: string,
     domProps: any,
-    aniType: 'scale',
+    aniType: 'scale' | 'leftToRight' | 'topToBottom' | 'none',
     aniDuration: number,
     aniStartTime: number,
     tl: any,

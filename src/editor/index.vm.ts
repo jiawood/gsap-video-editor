@@ -44,11 +44,27 @@ export default class VM {
         x: 70,
         y: 80,
       },
-      aniType: "scale",
+      aniType: "leftToRight",
       aniDuration: 2,
       aniStartTime: 1,
       tl: null,
     },
+    {
+        id: Math.random(),
+        type: 'text',
+        className: 'text' + Math.floor(Math.random() * 1000),
+        domProps: {
+            text: '嘉木',
+            color: 'black',
+            fontSize: 23,
+            x: 200,
+            y:250
+        },
+        aniType: 'none',
+        aniDuration: 0,
+        aniStartTime: 0,
+        tl: null,
+    }
   ];
 
   init = () => {
@@ -84,6 +100,15 @@ export default class VM {
 
     if (item.aniType === "scale") {
       this.scale(item);
+    }
+    if(item.aniType === 'leftToRight'){
+        this.leftToRight(item)
+    }
+    if(item.aniType === 'topToBottom'){
+        this.topToBottom(item)
+    }
+    if(item.aniType === 'none'){
+        this.setNone(item)
     }
   };
 
@@ -156,6 +181,8 @@ export default class VM {
     this.selectedIndex = -1 
     this.itemList = itemList
   }
+
+
   // 定义一系列的动画
   scale = (item: Item) => {
     const t = gsap.timeline();
@@ -191,4 +218,94 @@ export default class VM {
       );
     this.mainTl.add(t, item.aniStartTime);
   };
+
+    leftToRight = (item: Item) => {
+        const t = gsap.timeline();
+        item.tl = t;
+    
+        t.fromTo(
+            this.q("." + item.className),
+            {
+              opacity: 0,
+            },
+            {
+              opacity: 1,
+              duration: 0.01,
+            }
+          )
+          .fromTo(this.q("." + item.className), {
+            x: -200
+          }, {
+            x: 400,
+            duration: item.aniDuration,
+          })
+          .fromTo(
+            this.q("." + item.className),
+            {
+              opacity: 1,
+            },
+            {
+              opacity: 0,
+              duration: 0.01,
+            }
+          );
+        this.mainTl.add(t, item.aniStartTime);
+      };
+
+
+        topToBottom = (item: Item) => {
+            const t = gsap.timeline();
+            item.tl = t;
+        
+            t.fromTo(
+                this.q("." + item.className),
+                {
+                  opacity: 0,
+                },
+                {
+                  opacity: 1,
+                  duration: 0.01,
+                }
+              )
+              .fromTo(this.q("." + item.className), {
+                y: -300
+              }, {
+                y: 300,
+                duration: item.aniDuration,
+              })
+              .fromTo(
+                this.q("." + item.className),
+                {
+                  opacity: 1,
+                },
+                {
+                  opacity: 0,
+                  duration: 0.01,
+                }
+              );
+            this.mainTl.add(t, item.aniStartTime);
+          };
+        
+          setNone = (item: Item) => {
+            const t = gsap.timeline();
+            item.tl = t;
+            t.fromTo(
+                this.q("." + item.className),
+                {
+                  opacity: 0,
+                },
+                {
+                  opacity: 1,
+                  duration: 0.01,
+                }
+            ).set(
+                this.q("." + item.className),
+                {
+                    x: item.domProps.x,
+                    y: item.domProps.y,
+                    color: item.domProps.color,
+                    fontSize: item.domProps.fontSize
+                }
+            )
+          }
 }

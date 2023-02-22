@@ -62,8 +62,13 @@ const Editor = () => {
                 onClick={() => vm.editorItem(item, index)}
               >
                 {item.type === "image" && (
-                  <img className={item.className} src={item.domProps.src} />
+                  <img className={cl(item.className, 'aniImg', 'aniItem')} src={item.domProps.src} />
                 )}
+                {
+                  item.type === 'text' && (
+                    <div className={cl(item.className, 'aniText', 'aniItem')}>{item.domProps.text}</div>
+                  )
+                }
               </div>
             ))}
           </div>
