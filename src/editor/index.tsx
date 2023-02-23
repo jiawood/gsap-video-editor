@@ -74,8 +74,8 @@ const Editor = () => {
           </div>
           <Button onClick={vm.play}>play</Button>
           <Button onClick={vm.pause}>pause</Button>
-          <Button onClick={vm.add}>add</Button>
-          <Button onClick={vm.remove}>remove</Button>
+          <Button onClick={vm.addPic}>addPic</Button>
+          <Button onClick={vm.addText}>addText</Button>
           <DecimalStep vm={vm}></DecimalStep>
           <div className="oprateArea">
             {vm.selectedIndex > -1 && (
